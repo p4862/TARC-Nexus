@@ -223,25 +223,26 @@ Each project contains:
 
 ---
 
-## Tourism Category
+## Category
 
-Each project belongs to one category.
+Each project belongs to one category describing the **type of digital solution**.
 
-Examples:
+Tourism relevance is expressed through the project's content and its SDG alignment, not through the category.
 
-- Smart Tourism
-- Eco Tourism
-- Cultural Heritage
-- Hospitality
-- Food Tourism
-- Transportation
-- Community Tourism
-- Accessibility
-- Mobile Application
+Categories:
+
 - Web Application
-- AI Solution
-- IoT Solution
-- AR/VR Experience
+- Mobile Application
+- Progressive Web App (PWA)
+- Desktop Application
+- Artificial Intelligence
+- Internet of Things (IoT)
+- Data Analytics
+- AR / VR
+- Game Development
+- API / Backend Service
+- Digital Platform
+- Other
 
 ---
 
@@ -404,7 +405,7 @@ Shows latest approved submissions.
 Sorted by:
 
 - Views
-- Likes
+- Favourites
 - Votes
 
 ---
@@ -557,8 +558,11 @@ Available to Exhibitors.
 Displays:
 
 - Total Views
-- Total Likes
+- Total Favourites
 - Total Votes
+
+The following require visitor-level analytics tracking and are planned enhancements (see _Future Expansion_ in `SYSTEM-DATABASE.md`):
+
 - Visitor Trends
 - Daily Visitors
 - Referral Sources
@@ -572,12 +576,15 @@ Provides exhibition overview.
 Displays:
 
 - Total Projects
-- Total Visitors
 - Total Exhibitors
 - Total Guests
 - Published Projects
 - Pending Approvals
 - Popular Categories
+
+Metrics that depend on future visitor-analytics tracking:
+
+- Total Visitors
 - Active Users
 
 ---
@@ -592,7 +599,7 @@ Actions:
 - Reject
 - Return for Revision
 
-Review notes are recorded.
+Review decisions and notes are recorded on the project (`review_notes`, `reviewed_by`, `reviewed_at`).
 
 ---
 
@@ -648,6 +655,8 @@ Examples:
 ---
 
 ## Visitor Report
+
+_Requires visitor-analytics tracking (planned enhancement — see `SYSTEM-DATABASE.md`)._
 
 - Daily Visitors
 - Monthly Visitors

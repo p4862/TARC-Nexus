@@ -29,17 +29,19 @@ This architecture provides:
 
 # Technology Stack
 
-| Layer           | Technology      | Purpose                                                                  |
-| --------------- | --------------- | ------------------------------------------------------------------------ |
-| Frontend        | React           | Build the Single Page Application (SPA) user interface                   |
-| Styling         | Tailwind CSS    | Utility-first CSS framework for responsive and consistent UI development |
-| Build Tool      | Vite            | Frontend asset bundler and development server integrated with Laravel    |
-| Backend         | Laravel         | Application framework implementing the business logic and RESTful API    |
-| Database        | MySQL           | Relational database for storing application data                         |
-| Authentication  | Laravel Sanctum | Secure authentication for SPA and API requests                           |
-| API             | REST API        | Communication layer between React frontend and Laravel backend           |
-| File Storage    | Laravel Storage | Manage uploaded images, documents, posters, and other media files        |
-| Version Control | Git             | Source code version control and collaborative development                |
+| Layer           | Technology                     | Purpose                                                                  |
+| --------------- | ------------------------------ | ------------------------------------------------------------------------ |
+| Frontend        | React 19                       | Build the Single Page Application (SPA) user interface                   |
+| UI Components   | shadcn/ui                      | Accessible component primitives styled with Tailwind (primary library)   |
+| Styling         | Tailwind CSS v4                | Utility-first CSS framework for responsive and consistent UI development |
+| HTTP Client     | Axios                          | Promise-based HTTP client for consuming the REST API                      |
+| Build Tool      | Vite                           | Frontend asset bundler and development server integrated with Laravel    |
+| Backend         | Laravel 12 (PHP 8+)            | Application framework implementing the business logic and RESTful API    |
+| Database        | MySQL                          | Relational database for storing application data                         |
+| Authentication  | Laravel Sanctum + Google OAuth | Secure authentication for SPA and API requests                           |
+| API             | REST API                       | Communication layer between React frontend and Laravel backend           |
+| File Storage    | Laravel Storage                | Manage uploaded images, documents, posters, and other media files        |
+| Version Control | Git                            | Source code version control and collaborative development                |
 
 ---
 
@@ -110,10 +112,11 @@ Responsible for the user interface.
 
 Technology:
 
-- React
+- React 19
 - React Router
 - Axios
-- Tailwind CSS (optional)
+- Tailwind CSS v4
+- shadcn/ui
 
 Responsibilities:
 
@@ -455,7 +458,7 @@ Project
     ├── services
     │   └── projectApi.js
     │
-    └── context
+    └── contexts
         └── ProjectContext.jsx
 ```
 

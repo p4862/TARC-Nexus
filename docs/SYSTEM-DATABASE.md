@@ -128,6 +128,7 @@ A user can own multiple exhibition projects.
 ## Relationships
 
 - One User owns many Projects
+- One User (administrator) reviews many Projects
 - One User writes many Comments
 - One User casts many Votes
 - One User bookmarks many Favorites
@@ -156,6 +157,7 @@ Each project belongs to one exhibitor.
 | category_id         | bigint               | Project category                                    |
 | title               | string               | Project title                                       |
 | subtitle            | string (nullable)    | Optional subtitle                                   |
+| team_name           | string (nullable)    | Team / group name                                   |
 | slug                | string (unique)      | SEO-friendly URL                                    |
 | abstract            | text                 | Project summary                                     |
 | problem_statement   | text                 | Identified problem                                  |
@@ -170,7 +172,11 @@ Each project belongs to one exhibitor.
 | figma_url           | string (nullable)    | Figma prototype                                     |
 | video_url           | string (nullable)    | Demonstration video                                 |
 | status              | enum                 | Draft, Submitted, Under Review, Approved, Published |
+| review_notes        | text (nullable)      | Administrator review feedback                       |
+| reviewed_by         | bigint (nullable)    | Reviewing administrator (FK → users)                |
+| reviewed_at         | timestamp (nullable) | Review timestamp                                    |
 | featured            | boolean              | Featured project                                    |
+| views_count         | unsigned integer     | Total project views (default 0)                     |
 | published_at        | timestamp (nullable) | Publication date                                    |
 | created_at          | timestamp            | Created timestamp                                   |
 | updated_at          | timestamp            | Updated timestamp                                   |
@@ -179,8 +185,9 @@ Each project belongs to one exhibitor.
 
 ## Relationships
 
-- Belongs to one User
+- Belongs to one User (owner)
 - Belongs to one Category
+- May be reviewed by one User (administrator, via `reviewed_by`)
 - Has many Project Members
 - Has many Media
 - Has many Comments
@@ -228,7 +235,7 @@ Not every member is required to register an account.
 
 Stores the classification of digital solutions.
 
-Categories describe the type of application instead of tourism sectors.
+Categories describe the **type of digital solution** (for example, Web Application or Mobile Application), not tourism sectors. Tourism relevance is expressed through a project's content and its SDG alignment.
 
 ---
 
@@ -561,6 +568,7 @@ Stores exhibition news and announcements displayed on the homepage.
 | Parent   | Child          | Relationship |
 | -------- | -------------- | ------------ |
 | User     | Project        | One-to-Many  |
+| User (reviewer) | Project | One-to-Many  |
 | Category | Project        | One-to-Many  |
 | Project  | Project Member | One-to-Many  |
 | Project  | Media          | One-to-Many  |
@@ -584,6 +592,8 @@ The following constraints should be enforced:
 - Google ID must be unique.
 - Project slug must be unique.
 - One vote per user per project.
+- `views_count` defaults to `0`.
+- `reviewed_by` references `users.id` and is nullable (set only once a project has been reviewed); it should be set to `NULL` if the reviewing user is deleted.
 - Foreign keys must enforce referential integrity.
 - Cascade delete should be used where appropriate (e.g., deleting a project removes its media, members, comments, votes, favorites, and pivot records).
 
@@ -591,7 +601,10 @@ The following constraints should be enforced:
 
 # Future Expansion
 
-The database is intentionally designed for extensibility. Future enhancements may include:
+The database is intentionally designed for extensibility. A simple project view counter is already
+supported via `projects.views_count`; the richer visitor-analytics features below remain future work.
+
+Future enhancements may include:
 
 - Judge management and evaluation
 - Awards and certificates
@@ -599,7 +612,7 @@ The database is intentionally designed for extensibility. Future enhancements ma
 - QR code generation for project pages
 - AI-powered project recommendations
 - Live exhibition sessions
-- Visitor analytics dashboard
+- Advanced visitor analytics (per-visit tracking, referral sources, daily/monthly trends, session data)
 - Commercialization and industry collaboration modules
 
 The current schema provides a stable foundation for these features without requiring major structural changes.
