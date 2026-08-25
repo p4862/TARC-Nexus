@@ -263,6 +263,11 @@ Examples:
 
 Laravel Storage provides a unified interface for local or cloud storage.
 
+Project image and raster-poster uploads retain their validated original and
+produce a bounded WebP thumbnail in the Service Layer. The thumbnail path uses
+the existing nullable `media.thumbnail` field. Storage cleanup removes both
+files when media, its project, or its owner is deleted.
+
 ---
 
 # Request Lifecycle

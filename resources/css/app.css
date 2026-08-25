@@ -1,0 +1,381 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+
+@custom-variant dark (&:is(.dark *));
+
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.{js,jsx}";
+
+@theme {
+    /* VM2026 official brand colours are fixed at step 500. */
+    --color-vm-blue-50: #f4f6fa;
+    --color-vm-blue-100: #e4eaf4;
+    --color-vm-blue-200: #c5d3e7;
+    --color-vm-blue-300: #9db4d7;
+    --color-vm-blue-400: #6387bf;
+    --color-vm-blue-500: #2054a3;
+    --color-vm-blue-600: #1d498c;
+    --color-vm-blue-700: #193d72;
+    --color-vm-blue-800: #16315a;
+    --color-vm-blue-900: #132745;
+    --color-vm-blue-950: #101d31;
+
+    --color-vm-navy-50: #f4f5f8;
+    --color-vm-navy-100: #e4e8ef;
+    --color-vm-navy-200: #c5cddd;
+    --color-vm-navy-300: #9daac5;
+    --color-vm-navy-400: #6478a3;
+    --color-vm-navy-500: #213e7c;
+    --color-vm-navy-600: #1e366b;
+    --color-vm-navy-700: #1a2e58;
+    --color-vm-navy-800: #162646;
+    --color-vm-navy-900: #131e36;
+    --color-vm-navy-950: #101827;
+
+    --color-vm-teal-50: #f2fbfb;
+    --color-vm-teal-100: #e1f6f5;
+    --color-vm-teal-200: #bdebe8;
+    --color-vm-teal-300: #90ddd9;
+    --color-vm-teal-400: #4fc8c2;
+    --color-vm-teal-500: #03b1a8;
+    --color-vm-teal-600: #049890;
+    --color-vm-teal-700: #067c76;
+    --color-vm-teal-800: #07615d;
+    --color-vm-teal-900: #084a47;
+    --color-vm-teal-950: #093432;
+
+    --color-vm-yellow-50: #fffcf3;
+    --color-vm-yellow-100: #fff7e3;
+    --color-vm-yellow-200: #feeec2;
+    --color-vm-yellow-300: #fde298;
+    --color-vm-yellow-400: #fcd25a;
+    --color-vm-yellow-500: #fbbe14;
+    --color-vm-yellow-600: #d7a313;
+    --color-vm-yellow-700: #ae8511;
+    --color-vm-yellow-800: #886810;
+    --color-vm-yellow-900: #664f0e;
+    --color-vm-yellow-950: #47380d;
+
+    --color-vm-purple-50: #f7f5f9;
+    --color-vm-purple-100: #ede6f1;
+    --color-vm-purple-200: #d7c9e1;
+    --color-vm-purple-300: #bca4cd;
+    --color-vm-purple-400: #946eaf;
+    --color-vm-purple-500: #66308d;
+    --color-vm-purple-600: #582a7a;
+    --color-vm-purple-700: #492463;
+    --color-vm-purple-800: #3a1e4f;
+    --color-vm-purple-900: #2e193c;
+    --color-vm-purple-950: #22142c;
+
+    --color-vm-green-50: #f9fcf5;
+    --color-vm-green-100: #f1f8e8;
+    --color-vm-green-200: #e2f0cd;
+    --color-vm-green-300: #cde5ab;
+    --color-vm-green-400: #b0d679;
+    --color-vm-green-500: #8ec440;
+    --color-vm-green-600: #7aa838;
+    --color-vm-green-700: #64892f;
+    --color-vm-green-800: #4f6b27;
+    --color-vm-green-900: #3d511f;
+    --color-vm-green-950: #2c3918;
+
+    --color-vm-red-50: #fef4f4;
+    --color-vm-red-100: #fde4e5;
+    --color-vm-red-200: #fac6c7;
+    --color-vm-red-300: #f69ea0;
+    --color-vm-red-400: #f16467;
+    --color-vm-red-500: #eb2226;
+    --color-vm-red-600: #c91f22;
+    --color-vm-red-700: #a31b1d;
+    --color-vm-red-800: #7f1719;
+    --color-vm-red-900: #601415;
+    --color-vm-red-950: #431112;
+
+    --color-vm-crimson-50: #fcf4f4;
+    --color-vm-crimson-100: #f9e4e5;
+    --color-vm-crimson-200: #f1c5c7;
+    --color-vm-crimson-300: #e89da1;
+    --color-vm-crimson-400: #da6369;
+    --color-vm-crimson-500: #ca2029;
+    --color-vm-crimson-600: #ad1d24;
+    --color-vm-crimson-700: #8d191f;
+    --color-vm-crimson-800: #6e161b;
+    --color-vm-crimson-900: #541316;
+    --color-vm-crimson-950: #3b1012;
+
+    --color-sdg-8: #a21942;
+    --color-sdg-11: #fd9d24;
+    --color-sdg-12: #bf8b2e;
+
+    /* Generated Figma design palette — adopted 2026-08-02 per fidelity directive D-011.
+       Named tokens so pages/components reproduce the generated look without hardcoded hex. */
+    --color-pin-red-50: #fff0f1;
+    --color-pin-red-100: #ffd9dd;
+    --color-pin-red-500: #e60023;
+    --color-pin-red-600: #cc001f;
+    --color-pin-red-700: #9e0a0a;
+    --color-cream-canvas: #ffffff;
+    --color-cream-soft: #fbfbf9;
+    --color-cream-card: #f6f6f3;
+    --color-cream-200: #e5e5e0;
+    --color-cream-300: #dadad3;
+    --color-cream-400: #c8c8c1;
+    --color-ink-500: #91918c;
+    --color-ink-600: #62625b;
+    --color-ink-800: #33332e;
+    --color-ink-900: #262622;
+    --color-focus: #435ee5;
+
+    --font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+    --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+
+    --text-display: 3.815rem;
+    --text-display--line-height: 1.05;
+    --text-h1: 3.052rem;
+    --text-h1--line-height: 1.1;
+    --text-h2: 2.441rem;
+    --text-h2--line-height: 1.15;
+    --text-h3: 1.953rem;
+    --text-h3--line-height: 1.25;
+    --text-h4: 1.563rem;
+    --text-h4--line-height: 1.3;
+    --text-h5: 1.25rem;
+    --text-h5--line-height: 1.4;
+
+    /* Generated shape system: 16px on most surfaces (rounded-lg), 32px on large
+       cards/modals (rounded-2xl), pill for circular elements. */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 2rem;
+
+    --shadow-xs: 0 1px 2px rgb(16 24 39 / 0.05);
+    --shadow-sm: 0 1px 3px rgb(16 24 39 / 0.08);
+    --shadow-md: 0 4px 12px rgb(16 24 39 / 0.08);
+    --shadow-lg: 0 12px 24px rgb(16 24 39 / 0.1);
+    --shadow-xl: 0 24px 48px rgb(16 24 39 / 0.14);
+
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+:root {
+    /* Semantic tokens mapped to the generated Figma palette (D-011, 2026-08-02):
+       warm-cream surfaces, Pinterest-red primary, charcoal ink, blue focus ring. */
+    --background: #fbfbf9;
+    --foreground: #33332e;
+    --card: #ffffff;
+    --card-foreground: #33332e;
+    --popover: #ffffff;
+    --popover-foreground: #33332e;
+    --primary: #e60023;
+    --primary-foreground: #ffffff;
+    --secondary: #f6f6f3;
+    --secondary-foreground: #262622;
+    --muted: #f6f6f3;
+    --muted-foreground: #62625b;
+    --accent: #e5e5e0;
+    --accent-foreground: #262622;
+    --destructive: #9e0a0a;
+    --destructive-foreground: #ffffff;
+    --border: #dadad3;
+    --input: #dadad3;
+    --ring: #435ee5;
+    --radius: 1rem;
+    --chart-1: #e60023;
+    --chart-2: #03b1a8;
+    --chart-3: #fbbe14;
+    --chart-4: #7e238b;
+    --chart-5: #64892f;
+    --sidebar: #262622;
+    --sidebar-foreground: #f6f6f3;
+    --sidebar-primary: #e60023;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #33332e;
+    --sidebar-accent-foreground: #f6f6f3;
+    --sidebar-border: #3a3a34;
+    --sidebar-ring: #435ee5;
+}
+
+.dark {
+    /* Warm-dark counterpart of the generated light palette. The prototype is
+       light-only; these keep the red/cream/ink family coherent in dark mode. */
+    --background: #1c1b19;
+    --foreground: #f2f2ee;
+    --card: #262622;
+    --card-foreground: #f2f2ee;
+    --popover: #262622;
+    --popover-foreground: #f2f2ee;
+    --primary: #e60023;
+    --primary-foreground: #ffffff;
+    --secondary: #33332e;
+    --secondary-foreground: #f2f2ee;
+    --muted: #33332e;
+    --muted-foreground: #b6b6ad;
+    --accent: #3d3d37;
+    --accent-foreground: #f2f2ee;
+    --destructive: #e5484d;
+    --destructive-foreground: #1c1b19;
+    --border: #3a3a34;
+    --input: #3a3a34;
+    --ring: #6b82f0;
+    --chart-1: #ff4d68;
+    --chart-2: #34c8c0;
+    --chart-3: #fbbe14;
+    --chart-4: #b57bd0;
+    --chart-5: #9ccc5f;
+    --sidebar: #1f1e1c;
+    --sidebar-foreground: #f2f2ee;
+    --sidebar-primary: #e60023;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #33332e;
+    --sidebar-accent-foreground: #f2f2ee;
+    --sidebar-border: #3a3a34;
+    --sidebar-ring: #6b82f0;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    html {
+        @apply bg-background font-sans text-foreground antialiased;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply min-h-screen bg-background text-base text-foreground;
+        line-height: 1.6;
+    }
+
+    h1,
+    h2 {
+        @apply font-display;
+    }
+
+    button,
+    a,
+    input,
+    select,
+    textarea {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    }
+}
+
+@layer components {
+    .page-container,
+    .page-container-wide,
+    .page-container-reading {
+        width: 100%;
+        margin-inline: auto;
+        padding-inline: 1rem;
+    }
+
+    .page-container {
+        max-width: 80rem;
+    }
+
+    .page-container-wide {
+        max-width: 90rem;
+    }
+
+    .page-container-reading {
+        max-width: 48rem;
+    }
+
+    .page-section {
+        padding-block: 4rem;
+    }
+
+    .page-section-compact {
+        padding-block: 3rem;
+    }
+
+    .scrollbar-none {
+        scrollbar-width: none;
+    }
+
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media (min-width: 40rem) {
+        .page-container,
+        .page-container-wide,
+        .page-container-reading {
+            padding-inline: 1.5rem;
+        }
+    }
+
+    @media (min-width: 64rem) {
+        .page-container,
+        .page-container-wide,
+        .page-container-reading {
+            padding-inline: 2rem;
+        }
+
+        .page-section {
+            padding-block: 6rem;
+        }
+
+        .page-section-compact {
+            padding-block: 4rem;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

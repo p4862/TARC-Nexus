@@ -135,6 +135,10 @@ Required information:
 - Institution
 - User Role
 
+Public registration supports the **Exhibitor** and **Guest** roles only.
+Administrator accounts must be created or promoted through a trusted
+administrative process.
+
 ---
 
 ### Login
@@ -143,6 +147,11 @@ Allows users to authenticate using:
 
 - Email
 - Password
+- Google OAuth
+
+Google authentication is linked using Google's immutable account identifier
+(`google_id`). An existing local account is never linked solely because the
+Google email address matches.
 
 ---
 
@@ -180,7 +189,7 @@ Users can edit:
 - Email
 - Profile Picture
 - Biography
-- Contact Information
+- Institution
 
 ---
 
@@ -300,6 +309,18 @@ Possible statuses:
 - Approved
 - Published
 
+The authenticated Exhibitor project workspace lists and paginates only the
+current Exhibitor's projects. It may filter that owned list by the documented
+statuses above. Drafts can be edited or deleted; non-draft submissions are
+read-only to the Exhibitor while they follow the review workflow.
+
+Phase 6 implements the documented forward transitions `Submitted` → `Under
+Review` → `Approved` → `Published`. Publication may be scheduled; a project is
+public only after `published_at` arrives. Reject and Return for Revision remain
+requirements, but no transition is implemented for them because this enum has
+no rejected or revision state. Their outcomes must be approved before those
+actions are added.
+
 ---
 
 # Module 4 — Media Management
@@ -346,11 +367,14 @@ Upload:
 - Final Report
 - User Manual
 - Technical Documentation
+- Presentation Slides
 
 Supported:
 
 - PDF
 - DOCX
+- PPT
+- PPTX
 
 ---
 
@@ -361,7 +385,9 @@ Supports:
 - GitHub Repository
 - Live Demo
 - Figma Design
-- Presentation Slides
+
+Presentation slides are uploaded as project document media. The approved
+database schema does not contain an external slides URL.
 
 ---
 
@@ -369,7 +395,11 @@ Supports:
 
 ## Purpose
 
-Displays all approved projects.
+Displays all published projects.
+
+Only projects with the `Published` status and a `published_at` value that has
+arrived are visible through the public exhibition. Approved projects remain
+private until the separate publication transition occurs.
 
 ---
 
@@ -396,7 +426,7 @@ Displayed prominently on homepage.
 
 ### Newest Projects
 
-Shows latest approved submissions.
+Shows the latest published projects.
 
 ---
 
@@ -407,6 +437,10 @@ Sorted by:
 - Views
 - Favourites
 - Votes
+
+Phase 5 ranks popularity using the combined total of views, favorites, and
+People's Choice votes. The separate "Most Viewed" sort continues to use only
+the aggregate view count.
 
 ---
 
@@ -467,7 +501,9 @@ Buttons linking to:
 
 - GitHub
 - Live Demo
-- Slides
+
+Uploaded presentation slides are displayed with the project's downloadable
+documentation.
 
 ---
 
@@ -509,6 +545,10 @@ Supports sorting by:
 - Alphabetical
 - Most Viewed
 
+Public search, filter, sort, and pagination parameters are validated by the
+Laravel API. Category, SDG, and technology collections use the same published
+project query contract as the main gallery.
+
 ---
 
 # Module 8 — Favourite Projects
@@ -520,6 +560,11 @@ Functions:
 - Add Favourite
 - Remove Favourite
 - Favourite List
+
+Favorite actions require an authenticated account with the Guest role and are
+available only for currently published projects. Adding the same favorite more
+than once is idempotent and protected by the database's unique user/project
+constraint. The authenticated list is available at `/favorites`.
 
 ---
 
@@ -533,6 +578,11 @@ Supports:
 - One vote per project
 - One vote per user
 - Vote statistics
+
+People's Choice voting requires an authenticated Guest account and a currently
+published project. The approved database contract is enforced as one vote per
+user per project. Duplicate submissions return a conflict, and the current
+workflow does not expose vote removal.
 
 ---
 
@@ -549,6 +599,16 @@ Supports:
 
 Administrator may moderate comments.
 
+Authenticated Guests may create root comments and threaded replies. The owning
+Exhibitor may respond on their published project; other Exhibitors cannot post
+there. Administrators moderate from the public project discussion by removing
+a comment and its reply branch. Comments are validated as plain text with a
+2,000-character application limit.
+
+Project cards and detail pages also expose a share action. Browsers with the Web
+Share API use the native share sheet; other supported browsers copy the
+canonical project link. Sharing does not create visitor-level analytics data.
+
 ---
 
 # Module 11 — Analytics Dashboard
@@ -560,6 +620,10 @@ Displays:
 - Total Views
 - Total Favourites
 - Total Votes
+
+Phase 6 provides aggregate totals and a paginated per-project comparison for
+the authenticated Exhibitor's own projects. It does not identify individual
+visitors.
 
 The following require visitor-level analytics tracking and are planned enhancements (see _Future Expansion_ in `SYSTEM-DATABASE.md`):
 
@@ -587,6 +651,11 @@ Metrics that depend on future visitor-analytics tracking:
 - Total Visitors
 - Active Users
 
+The Phase 6 dashboard implements the five schema-backed totals above, the
+pending queue (`Submitted` plus `Under Review`), recent submissions, and
+popular categories based on currently published projects. It does not display
+Total Visitors or Active Users.
+
 ---
 
 # Module 13 — Project Review & Approval
@@ -601,13 +670,19 @@ Actions:
 
 Review decisions and notes are recorded on the project (`review_notes`, `reviewed_by`, `reviewed_at`).
 
+The implemented workflow lets an Administrator start review, record or update
+notes, approve an `Under Review` project, select approved/published work as
+featured, and schedule the separate publication transition. Reject and Return
+for Revision are intentionally unavailable until their missing status outcomes
+are added to the approved contract.
+
 ---
 
 # Module 14 — Category Management
 
 Administrator manages:
 
-- Tourism Categories
+- Solution Categories
 - Technology Tags
 - SDG Tags
 
@@ -616,6 +691,10 @@ Supports:
 - Create
 - Edit
 - Delete
+
+Phase 6 validates unique taxonomy values and prevents deletion while a record
+is assigned to a project. SDG management remains limited to the supported codes
+8, 11, and 12.
 
 ---
 
@@ -629,6 +708,11 @@ Administrator publishes:
 - Maintenance Notices
 
 Announcements appear on homepage.
+
+The Phase 6 announcement workflow provides create, edit, schedule, list, and
+delete operations. Up to three announcements whose `published_at` value has
+arrived appear on the homepage; future announcements remain private until
+their scheduled time.
 
 ---
 
@@ -670,6 +754,12 @@ _Requires visitor-analytics tracking (planned enhancement — see `SYSTEM-DATABA
 - Popular Projects
 - Award Winners
 
+Phase 6 implements project totals by status, category, and SDG; user totals by
+role and institution; total votes; top-voted published projects; and all
+published projects tied for the current People's Choice lead. Active-user and
+visitor reports remain excluded because the current schema cannot support
+them.
+
 ---
 
 # Module 17 — Homepage
@@ -697,7 +787,7 @@ Displays:
 - Projects
 - Students
 - Institutions
-- Visitors
+- Visitors (requires future visitor-level analytics and is not displayed by the current implementation)
 
 ---
 
@@ -756,6 +846,10 @@ Contains:
 - Responsive interface
 - Optimized image loading
 
+Phase 7 serves lazy-loaded project previews from bounded WebP thumbnails while
+retaining the validated original media for full-size viewing. Eloquent strict
+mode guards development and tests against accidental lazy loading.
+
 ---
 
 ## Security
@@ -764,6 +858,12 @@ Contains:
 - Role-based authorization
 - Secure file upload
 - Input validation
+
+Phase 7 adds raster width, height, and decoded-pixel ceilings on top of the
+existing extension, MIME, size, and authorization checks. Sensitive mutations
+are rate limited, private API responses are non-cacheable, and production
+responses support CSP, HSTS, frame, MIME-sniffing, referrer, and browser
+permissions protections.
 
 ---
 

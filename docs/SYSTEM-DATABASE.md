@@ -146,6 +146,17 @@ This is the primary entity of the system.
 
 Each project belongs to one exhibitor.
 
+The public exhibition reads only projects whose status is `Published` and whose
+`published_at` value has arrived. Opening a public project detail increments the
+existing aggregate `views_count`; this is a simple counter, not visitor-level
+analytics.
+
+The implemented administration workflow uses only the documented forward
+states: `Submitted` → `Under Review` → `Approved` → `Published`. Review actions
+write `review_notes`, `reviewed_by`, and `reviewed_at`; publication writes
+`published_at`. Reject and Return for Revision are not persisted because the
+approved enum defines no matching state.
+
 ---
 
 ## Attributes
@@ -407,6 +418,10 @@ Stores all uploaded project assets.
 
 A single table is used for all media types to simplify management.
 
+Presentation slide decks are stored as `document` media (`.ppt` or `.pptx`).
+The current project schema intentionally has no external `slides_url`; adding
+one requires a separately approved schema change.
+
 ---
 
 ## Attributes
@@ -418,7 +433,7 @@ A single table is used for all media types to simplify management.
 | type        | enum              | image, poster, video, document |
 | filename    | string            | Original filename              |
 | path        | string            | Storage path                   |
-| thumbnail   | string (nullable) | Thumbnail image                |
+| thumbnail   | string (nullable) | Generated WebP thumbnail path  |
 | uploaded_at | timestamp         | Upload timestamp               |
 | created_at  | timestamp         | Created timestamp              |
 | updated_at  | timestamp         | Updated timestamp              |
@@ -433,6 +448,11 @@ A single table is used for all media types to simplify management.
 - Documentation
 - User Manual
 - Technical Report
+- Presentation Slides
+
+Validated image and raster-poster uploads generate a bounded WebP thumbnail.
+PDF posters and non-image media keep `thumbnail` as `null`. The original asset
+remains available for full-size viewing or download.
 
 ---
 
@@ -449,6 +469,12 @@ A single table is used for all media types to simplify management.
 Allows guests and exhibitors to discuss projects.
 
 Supports threaded discussions.
+
+Phase 5 loads root comments in chronological pages and eager-loads their reply
+trees. A reply must belong to the same project discussion as its parent.
+Administrator moderation uses the approved schema's existing cascade behavior:
+removing a comment removes the complete reply branch beneath it. No
+undocumented moderation-status or soft-delete column is added.
 
 ---
 
@@ -499,6 +525,7 @@ Each user may vote once per project.
 
 - One vote per user per project
 - Duplicate votes are prevented using a unique constraint on `(user_id, project_id)`
+- A recorded vote is not exposed through a removal endpoint
 
 ---
 
@@ -506,6 +533,12 @@ Each user may vote once per project.
 
 - Belongs to one User
 - Belongs to one Project
+
+## Business Rules
+
+- One favorite per user per project
+- Duplicate favorites are prevented using a unique constraint on `(user_id, project_id)`
+- Adding an existing favorite is idempotent
 
 ---
 
@@ -540,6 +573,11 @@ Allows users to bookmark projects for future viewing.
 ## Purpose
 
 Stores exhibition news and announcements displayed on the homepage.
+
+Announcements may be scheduled. Public homepage queries include only records
+whose `published_at` timestamp has arrived, ordered newest first. The
+Administrator management workflow can create, edit, list, and delete both due
+and future records.
 
 ---
 
@@ -592,10 +630,13 @@ The following constraints should be enforced:
 - Google ID must be unique.
 - Project slug must be unique.
 - One vote per user per project.
+- One favorite per user per project.
 - `views_count` defaults to `0`.
 - `reviewed_by` references `users.id` and is nullable (set only once a project has been reviewed); it should be set to `NULL` if the reviewing user is deleted.
 - Foreign keys must enforce referential integrity.
 - Cascade delete should be used where appropriate (e.g., deleting a project removes its media, members, comments, votes, favorites, and pivot records).
+- Deleting a parent comment cascades to every reply beneath that comment.
+- Announcement `published_at` is indexed for due-item homepage queries.
 
 ---
 

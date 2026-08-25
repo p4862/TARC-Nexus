@@ -33,6 +33,30 @@ Related documents:
 
 ---
 
+# 0.1 Amendment — Generated-Design Palette Precedence (2026-08-02) 🛠 DERIVED (owner-approved override)
+
+> **Active override for the current build.** The project owner approved matching
+> the generated Figma design's visual identity (master-plan Revised Fidelity
+> Directive; handoff decision **D-011**). For the TARC Nexus VM2026 Online
+> Exhibition build, the **generated palette and typography take precedence over
+> the 🔒 BRAND colour ramp and typeface rules in Sections 1–3**:
+>
+> - Primary/chrome colour is the generated red `#e60023` (not `vm-blue-500`).
+> - Body type is **Inter**; display type is **Fraunces** (not Nunito Sans /
+>   Oswald).
+> - Surfaces are the generated warm-cream set; radii follow the 16px/32px/pill
+>   system.
+> - Authoritative token values live in `resources/css/app.css`; the mapping and
+>   rationale are in `docs/FIGMA-MAKE-DESIGN-TRANSLATION-CONTRACT.md`.
+>
+> This is a deliberate, documented deviation from the official VM2026 Brand
+> Guidelines, accepted by the owner. The 🔒 BRAND sections below are retained as
+> the official reference and as the fallback if this decision is reversed; they
+> are not deleted. The structural 🛠 DERIVED rules (spacing, states, focus,
+> breakpoints, accessibility) remain in force unchanged.
+
+---
+
 # 1. Brand Foundation
 
 ## 1.1 Logo Rationale 🔒 BRAND
