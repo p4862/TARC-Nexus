@@ -72,6 +72,41 @@ Grant the web and worker user write access only to `storage/` and
 `bootstrap/cache/`. All other application files should be read-only to the
 runtime user.
 
+## Railway Deployment
+
+Railway detects Laravel and serves the app with PHP-FPM and Caddy. Keep
+database migrations out of the build command; run them as a Railway pre-deploy
+command after environment variables are available.
+
+Required Railway service settings:
+
+- Build command: `npm run build`
+- Pre-deploy command:
+
+  ```bash
+  chmod +x ./railway/init-app.sh && sh ./railway/init-app.sh
+  ```
+
+The repository declares `ext-pdo_mysql` in `composer.json` so Railway's PHP
+builder installs the MySQL PDO driver. If this requirement is removed, Laravel
+will fail with `could not find driver` when `DB_CONNECTION=mysql`.
+
+Required Railway variables:
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_KEY` set to the generated Laravel key
+- `APP_URL` set to the Railway or custom HTTPS domain
+- `DB_CONNECTION=mysql`
+- `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`
+- `MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt` when using
+  PlanetScale
+- `SESSION_DOMAIN` and `SANCTUM_STATEFUL_DOMAINS` set to the deployed host
+
+If logs show `Host: 127.0.0.1` and `Database: laravel`, Railway has not received
+the production database variables for that service/environment, or a cached
+configuration was built before the variables were present.
+
 ## Web Server and Static Assets
 
 - Terminate TLS with a valid certificate and redirect HTTP to HTTPS.
