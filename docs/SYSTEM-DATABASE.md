@@ -636,7 +636,19 @@ The following constraints should be enforced:
 - Foreign keys must enforce referential integrity.
 - Cascade delete should be used where appropriate (e.g., deleting a project removes its media, members, comments, votes, favorites, and pivot records).
 - Deleting a parent comment cascades to every reply beneath that comment.
-- Announcement `published_at` is indexed for due-item homepage queries.
+- Announcement `published_at` should be indexed for due-item homepage queries
+  when the database platform allows the schema change safely.
+
+## PlanetScale Production Note
+
+The current production database is hosted on PlanetScale/Vitess, which rejects
+physical foreign key constraints. Production migrations therefore create the
+relationship ID columns and correctness-critical unique constraints, but do not
+create database-level foreign keys. Non-unique performance indexes should be
+added separately only after validating the PlanetScale deployment path.
+Relationship integrity and cascade behavior must be enforced through Laravel
+services, policies, and Eloquent model operations when using this production
+platform.
 
 ---
 

@@ -13,36 +13,30 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('parent_id')
-                ->nullable()
-                ->constrained('comments')
-                ->cascadeOnDelete();
+            $table->foreignId('user_id');
+            $table->foreignId('project_id');
+            $table->foreignId('parent_id')->nullable();
             $table->text('comment');
             $table->timestamps();
 
-            $table->index(['project_id', 'parent_id', 'created_at']);
         });
 
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id');
+            $table->foreignId('project_id');
             $table->timestamp('created_at')->useCurrent();
 
             $table->unique(['user_id', 'project_id']);
-            $table->index(['project_id', 'created_at']);
         });
 
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id');
+            $table->foreignId('project_id');
             $table->timestamp('created_at')->useCurrent();
 
             $table->unique(['user_id', 'project_id']);
-            $table->index(['project_id', 'created_at']);
         });
     }
 

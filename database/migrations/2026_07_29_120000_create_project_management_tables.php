@@ -34,8 +34,8 @@ return new class extends Migration
 
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->restrictOnDelete();
+            $table->foreignId('user_id');
+            $table->foreignId('category_id');
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->string('team_name')->nullable();
@@ -60,51 +60,44 @@ return new class extends Migration
                 'Published',
             ])->default('Draft');
             $table->text('review_notes')->nullable();
-            $table->foreignId('reviewed_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+            $table->foreignId('reviewed_by')->nullable();
             $table->timestamp('reviewed_at')->nullable();
             $table->boolean('featured')->default(false);
             $table->unsignedInteger('views_count')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
 
-            $table->index(['user_id', 'status']);
-            $table->index(['status', 'featured']);
-            $table->index('published_at');
         });
 
         Schema::create('project_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_id');
             $table->string('student_name');
             $table->string('matric_number');
             $table->string('programme');
             $table->string('supervisor');
             $table->timestamps();
 
-            $table->index(['project_id', 'matric_number']);
         });
 
         Schema::create('project_sdgs', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('sdg_id')->constrained()->restrictOnDelete();
+            $table->foreignId('project_id');
+            $table->foreignId('sdg_id');
             $table->text('contribution_description');
 
             $table->primary(['project_id', 'sdg_id']);
         });
 
         Schema::create('project_technologies', function (Blueprint $table) {
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('technology_id')->constrained()->restrictOnDelete();
+            $table->foreignId('project_id');
+            $table->foreignId('technology_id');
 
             $table->primary(['project_id', 'technology_id']);
         });
 
         Schema::create('media', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('project_id');
             $table->enum('type', ['image', 'poster', 'video', 'document']);
             $table->string('filename');
             $table->string('path');
@@ -112,7 +105,6 @@ return new class extends Migration
             $table->timestamp('uploaded_at')->useCurrent();
             $table->timestamps();
 
-            $table->index(['project_id', 'type']);
         });
     }
 
